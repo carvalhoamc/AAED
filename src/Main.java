@@ -7,52 +7,96 @@ public class Main {
 	private static final int CARACTERESMAXIMOS = 300;
 	private static int N = 0;
 	private static int tamanhoMaximoDigitado = 0;
+	private static String formulaInfixa;
+	private static String formulaPosfixa;
+
+	Main(){
+
+		formulaInfixa = "";
+		formulaPosfixa = "";
+	}
 
 
     public static void main(String[] args) {
 
 		Scanner leDadoTeclado = new Scanner(System.in);
         N = leDadoTeclado.nextInt();
+        leDadoTeclado.nextLine();
+
         if((N > 0) && (N < CASOSMAXIMOS))
 		{
 			for(int i = 1; i <= N; i++ )
 			{
-				Scanner le = new Scanner(System.in);
-				String formulaInfixa = le.nextLine();
-				String formulaPosfixa = transforma(formulaInfixa);
-				//System.out.println(formulaPosfixa);
-				System.out.printf(formulaPosfixa);
+				formulaInfixa = leDadoTeclado.nextLine();
+				formulaPosfixa = transforma(formulaInfixa);
+				System.out.println(formulaPosfixa);
+
 			}
 		}
     }
 
     private static String transforma(String expressaoInfixa) {
-        Stack<Character> codigoAlfanumerico = new Stack<>();
-        String expressaoPosFixada = "";
 
-        for (int i = 0; i < expressaoInfixa.length(); i++) {
-            if (testaOperador(expressaoInfixa.charAt(i))) {
-                while (!codigoAlfanumerico.empty() && codigoAlfanumerico.peek() != '(' && verificaProcedencia(codigoAlfanumerico.peek(), expressaoInfixa.charAt(i))) {
-                    expressaoPosFixada += codigoAlfanumerico.peek();
-                    codigoAlfanumerico.pop();
-                }
-                codigoAlfanumerico.push(expressaoInfixa.charAt(i));
-            } else if (testaOperando(expressaoInfixa.charAt(i))) {
-                expressaoPosFixada += expressaoInfixa.charAt(i);
-            } else if (expressaoInfixa.charAt(i) == '(') {
-                codigoAlfanumerico.push(expressaoInfixa.charAt(i));
-            } else if (expressaoInfixa.charAt(i) == ')') {
-                while (!codigoAlfanumerico.empty() && codigoAlfanumerico.peek() != '(') {
-                    expressaoPosFixada += codigoAlfanumerico.peek();
-                    codigoAlfanumerico.pop();
-                }
-                codigoAlfanumerico.pop();
-            }
-        }
-        while (!codigoAlfanumerico.empty()) {
-            expressaoPosFixada += codigoAlfanumerico.peek();
-            codigoAlfanumerico.pop();
-        }
+		Stack<Character> pilha = new Stack<>();
+        String expressaoPosFixada = "";
+		Character atual = '\0';
+		int tamanho = expressaoInfixa.length();
+
+        LOOP_PRINCIPAL:for (int i = 0; i < tamanho; i++) {
+
+			atual = expressaoInfixa.charAt(i);
+
+			if (testaOperando(atual)) {
+				expressaoPosFixada += atual;
+				continue LOOP_PRINCIPAL;
+			}
+
+			if (parentesisAberto(atual)) {
+				pilha.push(atual);
+				continue LOOP_PRINCIPAL;
+			}
+
+			if (parentesisFechado(atual)) {
+				Character aux = '\0';
+				do {
+					if(!pilha.isEmpty()){
+						aux = pilha.pop();
+						//pilha.pop();
+						if (aux != '(') {
+							expressaoPosFixada += aux;
+						}
+					}
+				} while (aux != '(');
+				continue LOOP_PRINCIPAL;
+			}
+
+			if (testaOperador(atual)) {
+				Character aux = '\0';
+				if(!pilha.isEmpty()){
+					aux = pilha.peek();
+					if(aux == '('){
+						pilha.push(atual);
+						continue LOOP_PRINCIPAL;
+					}
+					if (verificaPrecedencia(aux,atual)) {
+						expressaoPosFixada += pilha.pop();
+						pilha.push(atual);
+					} else {
+						pilha.push(atual);
+						continue LOOP_PRINCIPAL;
+					}
+				}else{
+					pilha.push(atual);
+					continue LOOP_PRINCIPAL;
+				}
+			}
+
+		}
+
+		while (!pilha.empty()) {
+			expressaoPosFixada += pilha.pop();
+		}
+
         return expressaoPosFixada;
     }
 
@@ -70,9 +114,25 @@ public class Main {
 				verificador = false;
 		}
 		return verificador;
-
-
     }
+
+    private static boolean parentesisAberto(char C){
+    	boolean verificador = true;
+		if(C == '('){
+    		return verificador;
+		}
+		verificador = false;
+		return verificador;
+	}
+
+	private static boolean parentesisFechado(char C){
+		boolean verificador = true;
+		if(C == ')'){
+			return verificador;
+		}
+		verificador = false;
+		return verificador;
+	}
 
     private static boolean testaOperando(char C) {
         boolean verificador = true;
@@ -147,7 +207,7 @@ public class Main {
 		return verificador;
     }
 
-    private static boolean verificaProcedencia(char operador1, char operador2) {
+    private static boolean verificaPrecedencia(char operador1, char operador2) {
         int pesoOperador1 = verificaPesoOperador(operador1);
         int pesoOperador2 = verificaPesoOperador(operador2);
         if (pesoOperador1 == pesoOperador2) {
