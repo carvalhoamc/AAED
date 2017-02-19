@@ -3,27 +3,20 @@ import java.util.Stack;
 
 public class Main {
 
-	private static final int CASOSMAXIMOS = 1000;
-	private static final int CARACTERESMAXIMOS = 300;
-	private static int N = 0;
-	private static int tamanhoMaximoDigitado = 0;
-	private static String formulaInfixa;
-	private static String formulaPosfixa;
+	private final int CASOSMAXIMOS = 1000;
+	private int N = 0;
+	private  String formulaInfixa;
+	private  String formulaPosfixa;
 
 	Main(){
 
 		formulaInfixa = "";
 		formulaPosfixa = "";
-	}
-
-
-    public static void main(String[] args) {
-
 		Scanner leDadoTeclado = new Scanner(System.in);
-        N = leDadoTeclado.nextInt();
-        leDadoTeclado.nextLine();
+		N = leDadoTeclado.nextInt();
+		leDadoTeclado.nextLine();
 
-        if((N > 0) && (N < CASOSMAXIMOS))
+		if((N > 0) && (N < CASOSMAXIMOS))
 		{
 			for(int i = 1; i <= N; i++ )
 			{
@@ -33,9 +26,16 @@ public class Main {
 
 			}
 		}
+	}
+
+
+    public static void main(String[] args) {
+
+		Main exercicio1 = new Main();
+
     }
 
-    private static String transforma(String expressaoInfixa) {
+    public String transforma(String expressaoInfixa) {
 
 		Stack<Character> pilha = new Stack<>();
         String expressaoPosFixada = "";
@@ -100,7 +100,7 @@ public class Main {
         return expressaoPosFixada;
     }
 
-    private static boolean testaOperador(char C) {
+    private boolean testaOperador(char C) {
         boolean verificador = true;
 		switch (C) {
 			case '+':
@@ -116,7 +116,7 @@ public class Main {
 		return verificador;
     }
 
-    private static boolean parentesisAberto(char C){
+    private boolean parentesisAberto(char C){
     	boolean verificador = true;
 		if(C == '('){
     		return verificador;
@@ -125,7 +125,7 @@ public class Main {
 		return verificador;
 	}
 
-	private static boolean parentesisFechado(char C){
+	private boolean parentesisFechado(char C){
 		boolean verificador = true;
 		if(C == ')'){
 			return verificador;
@@ -134,7 +134,7 @@ public class Main {
 		return verificador;
 	}
 
-    private static boolean testaOperando(char C) {
+    private boolean testaOperando(char C) {
         boolean verificador = true;
 		switch (C) {
 			case '0':
@@ -207,7 +207,7 @@ public class Main {
 		return verificador;
     }
 
-    private static boolean verificaPrecedencia(char operador1, char operador2) {
+    private boolean verificaPrecedencia(char operador1, char operador2) {
         int pesoOperador1 = verificaPesoOperador(operador1);
         int pesoOperador2 = verificaPesoOperador(operador2);
         if (pesoOperador1 == pesoOperador2) {
@@ -216,7 +216,7 @@ public class Main {
         return (pesoOperador1 > pesoOperador2) ? true : false;
     }
 
-    private static int verificaPesoOperador(char operador) {
+    private int verificaPesoOperador(char operador) {
         int peso = 0;
         switch (operador) {
             case '+':
@@ -233,3 +233,24 @@ public class Main {
         return peso;
     }
 }
+
+//	"(4+8)*(6-5)/((3-2)*(2+2))"
+//	"48+65-*32-22+*/"
+
+//	"a-b^c^(d-(e+f*g))*h"
+//	"abc^defg*+-^h*-"
+
+//	"A*(B+C)"
+//  "ABC+*"
+
+//	"(X*Y+Z)"
+//  "XY*Z+"
+
+//  "4^2*3-3+8/4/(1+1)"
+//  "42^3*3-84/11+/+"
+
+//	"((((((1+2)+3)+4)+5)+6)+7)"
+//	"12+3+4+5+6+7+"
+
+//	"(3*(4+5))"
+//	"345+*"
