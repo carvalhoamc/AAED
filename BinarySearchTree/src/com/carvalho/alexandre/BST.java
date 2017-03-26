@@ -161,4 +161,28 @@ public class BST  {
 			}
 		}
 	}
+
+
+	/**
+	 *
+ 	 * @param a valor inicial da chave
+	 * @param b valor final da chave
+	 * @param x root da arvore
+	 */
+	void imprimeIntervalo_a_b(int a, int b, RecordData x) {
+		if(x != null){
+			imprimeIntervalo_a_b(a,b,x.getLeft());
+			if((x.getKey() >= a) && (x.getKey() <=b)){
+				System.out.print(x.getKey() + " ");
+			}
+			imprimeIntervalo_a_b(a,b,x.getRight());
+		}
+
+
+
+
+
+	}
+
+
 }

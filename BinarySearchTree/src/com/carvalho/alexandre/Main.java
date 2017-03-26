@@ -20,25 +20,37 @@ public class Main {
     public static void main(String[] args) {
 
         /** Create Root Node */
-        RecordData data = new RecordData(1);
+        RecordData data = new RecordData(15);
         data.setRoot(true);
 
         /** Create BST with Root Node */
         BST tree = new BST(data);
 
 
-        tree.treeInsert(data,13);
-        tree.treeInsert(data,9);
+        tree.treeInsert(data,6);
         tree.treeInsert(data,18);
+        tree.treeInsert(data,3);
+        tree.treeInsert(data,7);
         tree.treeInsert(data,17);
         tree.treeInsert(data,20);
-        tree.treeInsert(data,6);
-        tree.treeInsert(data,3);
         tree.treeInsert(data,2);
         tree.treeInsert(data,4);
-        tree.treeInsert(data,7);
+        tree.treeInsert(data,1);
+        tree.treeInsert(data,13);
+        tree.treeInsert(data,19);
+        tree.treeInsert(data,22);
+        tree.treeInsert(data,9);
+        tree.treeInsert(data,24);
 
-
-
+        System.out.println("Número total de nós:  " + tree.getTotalNodeNumber());
+        System.out.println("Raiz  " + tree.getRoot().getKey());
+        System.out.println("Esquerda  " + tree.getRoot().getLeft().getKey());
+        System.out.println("Direita  " + tree.getRoot().getRight().getKey());
+        System.out.println("Pai  " + tree.getRoot().getParent());
+        System.out.println();
+        tree.inOrderTreeWalk(tree.getRoot());
+        System.out.println();
+        System.out.println("Chaves entre a e b");
+        tree.imprimeIntervalo_a_b(10,17,tree.getRoot());
     }
 }
